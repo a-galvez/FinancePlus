@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from app.api import finances
+from app.api import auth
 from app.db.session import engine
-from app.db.base import Base
+from app.models.base import Base
 
 app = FastAPI()
-app.include_router(finances.router, prefix="/api", tags=["Finanzas"])
+app.include_router(auth.router, prefix="/auth", tags=["Autenticación"])
 
 Base.metadata.create_all(bind=engine)

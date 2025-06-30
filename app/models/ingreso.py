@@ -1,15 +1,17 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float
-from sqlalchemy.orm import relationship
-from app.db.base import Base
+from typing import Optional
+from sqlalchemy import ForeignKey, String, Float, Date
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from app.models.base import Base
+from app.models.usuario import Usuario
 
 
 class Ingreso(Base):
     __tablename__ = "ingresos"
 
-    id = Column(Integer, primary_key=True, index=True)
-    id_usuario = Column(Integer, ForeignKey("usuarios.id_usuario"), nullable=False)
-    descripcion = Column(String)
-    monto = Column(Float, nullable=False)
-    fecha = Column(Date)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    monto: Mapped[float] = mapped_column(Float)
+    descripcion: Mapped[Optional[str]] = mapped_column(String(300), nullable=True)
+    fecha: Mapped[Optional[str]] = mapped_column(Date)
 
-    usuario = relationship("Usuario")
+    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id"))
+    usuario: Mapped["Usuario"] = relationship(back_populates="ingresos")
